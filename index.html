@@ -1397,10 +1397,29 @@
         { threshold: 0.12 },
       );
       reveals.forEach((r) => observer.observe(r));
+
       function handleSubmit(e) {
+        e.preventDefault();
+        const form = e.target;
         const btn = document.querySelector(".waitlist-btn");
+        const input = document.querySelector(".waitlist-input");
+
         btn.textContent = "Submitting...";
         btn.disabled = true;
+
+        fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        })
+          .then(() => {
+            btn.textContent = "You're in";
+            input.value = "";
+          })
+          .catch(() => {
+            btn.textContent = "Try again";
+            btn.disabled = false;
+          });
       }
     </script>
   </body>
